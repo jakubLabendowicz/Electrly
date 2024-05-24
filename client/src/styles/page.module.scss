@@ -1,0 +1,37 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    background-color: #F8F9FD;
+    min-height: calc(100vh - 64px);
+    border-radius: 20px 20px 0px 0px;
+    width: 100%;
+    height: auto;
+
+    .page__inner {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+
+        .page_content__container {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 64px);
+            height: auto;
+            min-height: calc(100vh - 64px);
+            margin-right: 64px;
+        }
+
+        .page_bar__container {
+            display: flex;
+            flex-direction: row;
+            position: fixed;
+            top: 64px;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            width: 64px;
+            height: calc(100% - 64px);
+        }
+    }
+}

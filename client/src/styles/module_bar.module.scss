@@ -1,0 +1,87 @@
+.module_bar {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+
+    .module_bar__inner {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 64px;
+        height: 100%;
+        padding: 8px;
+
+        .module_bar__top {
+            width: 100%;
+        }
+
+        .module_bar__center {
+            width: 100%;
+        }
+
+        .module_bar__bottom {
+            width: 100%;
+        }
+    }
+}
+
+.module_bar_button {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.module_bar_button:hover {
+    background-color: #210aee0a;
+}
+
+.module_bar_button:active {
+    background-color: #cbc7ee;
+}
+
+.module_bar_button__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    gap: 8px;
+}
+
+.module_bar_button__icon {
+    min-width: 24px;
+    min-height: 24px;
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.module_bar_button__icon___active {
+    background-color: #cbc7ee;
+}
+
+.module_bar_button__icon___active:hover {
+    background-color: #210aee0a;
+}
+
+.module_bar_button__icon___active:active {
+    background-color: #cbc7ee;
+}
+
+.module_bar_button__label {
+    font-size: 12px;
+    font-weight: 600;
+    padding-right: 12px;
+}

@@ -1,0 +1,23 @@
+.air {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 64px);
+    width: 100%;
+    height: auto;
+
+    .air__inner {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+
+        .air_content__container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: auto;
+            height: calc(100vh - 64px);
+            overflow: auto;
+        }
+    }
+}

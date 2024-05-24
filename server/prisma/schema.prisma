@@ -1,0 +1,452 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  nickname      String  @unique
+  firstName     String?
+  lastName      String?
+  email         String  @unique
+  emailVerified Boolean @default(false)
+  phone         String?
+  phoneVerified Boolean @default(false)
+  gender        String?
+  birthdate     DateTime?
+  zoneInfo      String?
+  locale        String?
+  imageUrl      String?
+  // childs fields
+  userEmailNotifications UserEmailNotification[]
+  userPasswordCodes   UserPasswordCode[]
+  userPasswords     UserPassword[]
+  userVerificationCodes UserVerificationCode[]
+  userDeactivationCodes UserDeactivationCode[]
+  userAccessTokens  UserAccessToken[]
+  userRefreshTokens UserRefreshToken[]
+  userDevices       UserDevices[]
+  clientAuthorizationCodes  ClientAuthorizationCode[]
+  clientAccessTokens    ClientAccessToken[]
+  clientRefreshTokens   ClientRefreshToken[]
+  clientAllowedScopes   ClientAllowedScope[]
+  userRoles         UserRole[]
+  threads         Thread[]
+  threadReactions ThreadReaction[]
+  threadComments ThreadComment[]
+  threadCommentReactions ThreadCommentReaction[]
+}
+
+model UserEmailNotification {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(false)
+  // custom fields
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  subject       String
+  template      String?
+  context       Json?
+}
+
+model UserPasswordCode {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  code          String  @unique
+  expiresAt     DateTime
+  // childs fields
+  userPasswords  UserPassword[]
+}
+
+model UserPassword {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  passwordHash  String
+  question      String?
+  answer        String?
+  expiresAt     DateTime?
+  userPasswordCode UserPasswordCode @relation(fields: [userPasswordCodeId], references: [id])
+  userPasswordCodeId String
+}
+
+model UserVerificationCode {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  code          String  @unique
+  expiresAt     DateTime
+  type          String?
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+}
+
+model UserDeactivationCode {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  code          String  @unique
+  expiresAt     DateTime
+  type          String?
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+}
+
+model UserRefreshToken {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  token         String  @unique
+  expiresAt     DateTime
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  // childs fields
+  userAccessTokens  UserAccessToken[]
+}
+
+model UserAccessToken {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  token         String  @unique
+  expiresAt     DateTime
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  userRefreshToken UserRefreshToken @relation(fields: [userRefreshTokenId], references: [id])
+  userRefreshTokenId String
+}
+
+model UserRole {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  role          Role    @relation(fields: [roleId], references: [id])
+  roleId        String
+}
+
+model UserDevices {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+}
+
+
+
+
+model Client {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  name          String  @unique
+  secret        String  @unique
+  redirectUri   String
+  // childs fields
+  clientAuthorizationCodes  ClientAuthorizationCode[]
+  clientAccessTokens  ClientAccessToken[]
+  clientRefreshTokens ClientRefreshToken[]
+  clientScopes  ClientScope[]
+  clientAllowedScopes ClientAllowedScope[]
+}
+
+model ClientAuthorizationCode {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  code   String  @unique
+  expiresAt     DateTime
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String
+  // childs fields
+  clientRefreshTokens ClientRefreshToken[]
+  clientAccessTokens  ClientAccessToken[]
+}
+
+model ClientRefreshToken {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  token  String  @unique
+  expiresAt     DateTime
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String
+  clientAuthorizationCode ClientAuthorizationCode? @relation(fields: [clientAuthorizationCodeId], references: [id])
+  clientAuthorizationCodeId String?
+  // childs fields
+  clientAccessTokens  ClientAccessToken[]
+}
+
+model ClientAccessToken {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  token         String  @unique
+  expiresAt     DateTime
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String
+  clientAuthorizationCode ClientAuthorizationCode? @relation(fields: [clientAuthorizationCodeId], references: [id])
+  clientAuthorizationCodeId String?
+  clientRefreshToken ClientRefreshToken @relation(fields: [clientRefreshTokenId], references: [id])
+  clientRefreshTokenId String
+}
+
+model ClientScope {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true) 
+  // custom fields
+  scope         Scope   @relation(fields: [scopeId], references: [id])
+  scopeId       String
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model ClientAllowedScope {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  scope         Scope   @relation(fields: [scopeId], references: [id])
+  scopeId       String
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+}
+
+
+
+
+
+
+model Permission {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  name          String
+  code          String  @unique
+  description   String?
+  parentPermission        Permission? @relation("PermissionParent", fields: [parentPermissionId], references: [id])
+  parentPermissionId      String?
+  // childs fields
+  rolePermissions RolePermission[]
+  scopePermissions ScopePermission[]
+  childPermissions Permission[] @relation("PermissionParent")
+}
+
+
+
+
+
+
+model Role {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  name          String  @unique
+  description   String?
+  isDefault     Boolean @default(false)
+  // childs fields
+  rolePermissions RolePermission[]
+  userRoles     UserRole[]
+}
+
+model RolePermission {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  role          Role    @relation(fields: [roleId], references: [id])
+  roleId        String
+  permission    Permission @relation(fields: [permissionId], references: [id])
+  permissionId  String
+}
+
+
+
+
+
+model Scope {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  active        Boolean @default(true)
+  // custom fields
+  name          String  @unique
+  description   String?
+  isDefault     Boolean @default(false)
+  // childs fields
+  scopePermissions ScopePermission[]
+  clientScopes  ClientScope[]
+  clientAllowedScopes ClientAllowedScope[]
+}
+
+model ScopePermission {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  scope         Scope   @relation(fields: [scopeId], references: [id])
+  scopeId       String
+  permission    Permission @relation(fields: [permissionId], references: [id])
+  permissionId  String
+}
+
+
+
+
+
+model Thread {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  title         String
+  content       String
+  imageUrl      String?
+  threadCategory      ThreadCategory    @relation(fields: [threadCategoryId], references: [id])
+  threadCategoryId    String
+  // childs fields
+  threadReactions ThreadReaction[]
+  threadComments ThreadComment[]
+}
+
+model ThreadReaction {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  thread        Thread    @relation(fields: [threadId], references: [id])
+  threadId      String
+  positive      Boolean
+}
+
+model ThreadComment {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  thread        Thread    @relation(fields: [threadId], references: [id])
+  threadId      String
+  content       String
+  // childs fields
+  threadCommentReactions ThreadCommentReaction[]
+}
+
+model ThreadCommentReaction {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String
+  threadComment       ThreadComment    @relation(fields: [threadCommentId], references: [id])
+  threadCommentId     String
+  positive      Boolean
+}
+
+model ThreadCategory {
+  // system fields
+  id            String     @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+  active        Boolean @default(true)
+  // custom fields
+  name          String @unique
+  imageUrl      String?
+  // childs fields
+  threads Thread[]
+}

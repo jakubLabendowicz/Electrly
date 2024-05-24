@@ -1,0 +1,28 @@
+.page_content_section {
+    width: 100%;
+
+    .page_content_section__inner {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 16px;
+
+        .page_content_section__title {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .page_content_section__main {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 32px;
+        }
+
+    }
+}

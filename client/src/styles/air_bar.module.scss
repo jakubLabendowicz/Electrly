@@ -1,0 +1,62 @@
+.air_bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    .air_bar__inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+.air_bar_button {
+    height: 100%;
+    width: auto;
+    border-radius: 8px;
+}
+
+.air_bar_button:hover {
+    background-color: #210aee0a;
+}
+
+.air_bar_button:active {
+    background-color: #cbc7ee;
+}
+
+.air_bar_button___active {
+    background-color: #cbc7ee;
+}
+
+.air_bar_button__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    gap: 8px;
+}
+
+.air_bar_button__icon {
+    min-width: 24px;
+    min-height: 24px;
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.air_bar_button__label {
+    font-size: 12px;
+    font-weight: 600;
+    padding-right: 12px;
+}
